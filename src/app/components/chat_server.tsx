@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Poor_Story, Poppins } from "next/font/google"
 
 const poppins = Poppins({
