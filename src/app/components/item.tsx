@@ -13,7 +13,7 @@ export default function Item({ text, index, handleModul }: { text: string, index
             hover:bg-gray-200
             flex items-center
             cursor-pointer 
-            p-8 pt-4 pb-4 border-white
+            p-4 md:p-8 pt-4 pb-4 border-white
             shadow-lg
             gap-2
             ${poppins.className}`}

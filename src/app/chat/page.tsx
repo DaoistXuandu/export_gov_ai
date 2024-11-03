@@ -1,5 +1,5 @@
 "use client"
-import { Poppins, Noto_Sans, Comforter_Brush } from "next/font/google"
+import { Poppins, Noto_Sans, Roboto } from "next/font/google"
 import { useEffect, useState, useRef } from "react"
 import Item from "../components/item"
 import { babelIncludeRegexes } from "next/dist/build/webpack-config"
@@ -10,6 +10,11 @@ import { text } from "stream/consumers"
 
 const poppins = Poppins({
     weight: '400',
+    subsets: ['latin'],
+})
+
+const roboto = Roboto({
+    weight: '500',
     subsets: ['latin'],
 })
 
@@ -79,7 +84,7 @@ export default function Chat() {
             setChatHistory(prevItems => prevItems.slice(0, -1));
             setChatHistory(prev => [
                 ...prev,
-                { status: true, text: dummy_mini, flag: false }
+                { status: true, text: dummy, flag: false }
             ])
             setWait(false)
         }, 1000)
@@ -115,12 +120,12 @@ export default function Chat() {
             bg-gray-200`}>
             {
                 modul == -1 ?
-                    <div className="p-20 pt-12 flex flex-col space-y-10 justify-center items-center h-full">
+                    <div className="md:p-20 p-3 pt-12 flex flex-col space-y-10 justify-center items-center h-full">
                         <div className="flex text-white flex-col items-center gap-2 animate-bounce">
-                            <h1 className={`font-bold text-6xl ${noto_sans_w.className}`}>Halo, Sobat UMKM</h1>
-                            <p className={`text-4xl ${noto_sans.className}`}>Apa yang ingin anda tanyakan?</p>
+                            <h1 className={`font-bold text-4xl md:text-6xl ${noto_sans_w.className}`}>Halo, Sobat UMKM</h1>
+                            <p className={`text-2xl md:text-4xl ${noto_sans.className}`}>Apa yang ingin anda tanyakan?</p>
                         </div>
-                        <div className="flex flex-row w-full justify-center gap-3">
+                        <div className="flex flex-col md:flex-row w-full justify-center gap-3">
                             {
                                 avail_modul.map((item, index) => (
                                     <Item key={index} text={item} index={index} handleModul={handleModul} />
@@ -132,8 +137,8 @@ export default function Chat() {
                     </div>
                     :
                     <div className="h-full">
-                        <div ref={containerRef} className="h-5/6 p-20 pt-12 flex flex-col gap-8 overflow-y-scroll">
-                            <h1 className={`font-bold text-4xl ${noto_sans_w.className} animate-bounce`}>{avail_modul[modul]}</h1>
+                        <div ref={containerRef} className="h-5/6 p-4 md:p-20 pt-12 flex flex-col gap-8 overflow-y-scroll">
+                            <h1 className={`font-bold text-4xl ${roboto.className} animate-bounce text-center text-white md:text-black md:text-left`}>{avail_modul[modul]}</h1>
                             <div className="flex flex-col gap-8">
                                 {
                                     chatHistory != undefined && chatHistory.length > 0 ?
@@ -147,7 +152,7 @@ export default function Chat() {
                         </div>
 
 
-                        <div className="h-1/6 z-100 w-full p-10 pl-20 pr-20 flex flex-row flex items-center">
+                        <div className="h-1/6 z-100 w-full p-4 md:p-10 md:pl-20 md:pr-20 flex flex-row flex items-center">
                             <form className="relative w-full flex items-center">
                                 <input
                                     disabled={wait}

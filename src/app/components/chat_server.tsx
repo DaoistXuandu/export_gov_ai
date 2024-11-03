@@ -8,17 +8,19 @@ const poppins = Poppins({
 export default function ChatServer({ text, flag }: { text: string, flag: boolean }) {
     return (
         <div className="flex flex-row gap-2">
-            <div>
+            <div className="w-fit">
                 <img src="https://github.com/shadcn.png" className="w-12 h-12 rounded-full" />
             </div>
-            {
-                flag ?
-                    <div className="loader"></div>
-                    :
-                    <div className={`bg-white rounded-sm p-3 ${poppins.className} shadow-lg`}>
-                        {text}
-                    </div>
-            }
+            <div className="w-fit">
+                {
+                    flag ?
+                        <div className="loader"></div>
+                        :
+                        <div className={`bg-white rounded-sm p-3 ${poppins.className} shadow-lg`}>
+                            {text}
+                        </div>
+                }
+            </div>
         </div>
     )
 }
