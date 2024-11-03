@@ -10,10 +10,7 @@ export default function ChatServer({ text, flag }: { text: string, flag: boolean
     return (
         <div className="flex flex-row gap-2">
             <div>
-                <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                <img src="https://github.com/shadcn.png" className="w-12 h-12 rounded-full" />
             </div>
             {
                 flag ?

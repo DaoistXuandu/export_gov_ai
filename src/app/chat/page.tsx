@@ -52,7 +52,7 @@ export default function Chat() {
     const [wait, setWait] = useState(false)
     const [data, setData] = useState("")
     const [modul, setModul] = useState(-1)
-    const [resutl, setResult] = useState<string[]>([])
+    const [result, setResult] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<{ status: boolean, text: string, flag: boolean }[]>([])
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -62,6 +62,7 @@ export default function Chat() {
     }
 
     function handleAdd() {
+        setWait(true)
         setChatHistory(prev => [
             ...prev,
             { status: false, text: data, flag: false }
@@ -80,6 +81,7 @@ export default function Chat() {
                 ...prev,
                 { status: true, text: dummy_mini, flag: false }
             ])
+            setWait(false)
         }, 1000)
     }
 
@@ -148,12 +150,14 @@ export default function Chat() {
                         <div className="h-1/6 z-100 w-full p-10 pl-20 pr-20 flex flex-row flex items-center">
                             <form className="relative w-full flex items-center">
                                 <input
+                                    disabled={wait}
                                     onChange={e => setData(e.target.value)}
                                     value={data}
                                     placeholder="Apa yang bisa dibantu?"
                                     className={`border border-1 shadow-lg w-full p-5 pt-3 pb-3 pr-12 rounded-full ${noto_sans_m.className}`} type="text" />
 
                                 <button
+                                    disabled={wait}
                                     onClick={e => { e.preventDefault(); handleAdd() }}
                                     className="w-fit h-fit absolute right-3">
                                     <img src="/image/send_icon.svg" className="w-8 h-8 flex justify-center items-center" alt="" />

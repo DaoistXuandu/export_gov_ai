@@ -13,10 +13,7 @@ export default function ChatClient({ text }: { text: string }) {
                 {text}
             </div>
             <div>
-                <Avatar>
-                    <AvatarImage src="https://github.com/DaoistXuandu.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                <img src="https://github.com/DaoistXuandu.png" className="w-12 h-12 rounded-full" />
             </div>
         </div>
     )
