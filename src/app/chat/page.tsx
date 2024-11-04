@@ -47,18 +47,26 @@ const agent =
     ]
 
 const avail_modul = [
-    "Riset Pasar",
-    "Regulasi dan Standar Mutu",
-    "Riset Produk dan Pengembangan",
-    "Logistik dan Distribusi",
-    "Prediksi Harga"
+    "Agent Market Research",
+    "Tanya Regulasi",
+    "Agent Product R&D",
+    "Tanya Pengiriman",
+    "Prediksi Biaya"
 ]
+const avail_modul_desc = [
+    "Dapatkan analisis untuk memahami pasar dengan tepat",
+    "Pastikan produk Anda mematuhi regulasi dan standar mutu di negara tujuan",
+    "Dapatkan analisis untuk memahami pasar dengan tepat",
+    "Tanya tentang pengiriman untuk ekspor Anda",
+    "Perkirakan total biaya ekspor disini"
+]
+
 const first_message = [
-    "Ayo tanyakan kondisi pasar internasional disini!!!",
-    "Bingung regulasi ekspor impor? Jangan ragu tanya disini!!",
-    "Tulis deskripsi produkmu!! Langkah awal menaklukkan pasar dunia!",
-    "Ingin distribusimu aman? Tanya dulu aja!",
-    "Pengen tahu perkiraan harga barang? Cek aja prediksinya!"
+    "Agent Market Research memudahkan Anda melakukan analisis SWOT (Strength, Weakness, Opportunities, Threats) dan STP (Segmenting, Targeting, Positioning) dengan bantuan AI yang bekerja secara otomatis. Proses ini mencari informasi di berbagai sumber, mengumpulkan data relevan, dan menyusunnya menjadi laporan lengkap tanpa perlu usaha manual. Anda hanya perlu memasukkan deskripsi produk Anda, dan laporan strategi yang komprehensif mencakup kekuatan, kelemahan, peluang, ancaman, serta segmentasi, penargetan, dan pemosisian pasar akan tersedia untuk membantu Anda memahami pasar dan mengambil keputusan terbaik.",
+    "TanyaRegulasi memastikan produk Anda mematuhi regulasi dan standar mutu di negara tujuan. Terintegrasi dengan sumber resmi Inatrims, fitur ini menyediakan jawaban cepat dan akurat terkait regulasi dan standar mutu ekspor di negara tujuan, sehingga Anda dapat memastikan kepatuhan tanpa kerumitan. Dapatkan informasi yang Anda butuhkan untuk memastikan produk Anda siap menembus pasar internasional dengan mudah dan aman.",
+    "TanyaRegulasi memastikan produk Anda mematuhi regulasi dan standar mutu di negara tujuan. Terintegrasi dengan sumber resmi Inatrims, fitur ini menyediakan jawaban cepat dan akurat terkait regulasi dan standar mutu ekspor di negara tujuan, sehingga Anda dapat memastikan kepatuhan tanpa kerumitan. Dapatkan informasi yang Anda butuhkan untuk memastikan produk Anda siap menembus pasar internasional dengan mudah dan aman.",
+    "TanyaPengiriman memudahkan Anda menemukan solusi pengiriman ekspor terbaik. Dengan teknologi AI, fitur ini menyediakan informasi terkini dan daftar lokasi ekspor terdekat untuk mendukung pengiriman ekspor Anda.",
+    "Estimasi Biaya membantu Anda merencanakan ekspor dengan lebih baik. Dengan Machine Learning, fitur ini membantu Anda mengestimasi total biaya ekspor."
 ]
 
 export default function Chat() {
@@ -239,10 +247,10 @@ export default function Chat() {
                             <h1 className={`font-bold text-4xl md:text-6xl ${noto_sans_w.className}`}>Halo, Sobat UMKM</h1>
                             <p className={`text-2xl md:text-4xl ${noto_sans.className}`}>Apa yang ingin anda tanyakan?</p>
                         </div>
-                        <div className="flex flex-col md:flex-row w-full justify-center gap-3">
+                        <div className="flex flex-col md:flex-row w-full flex-wrap justify-center gap-3">
                             {
                                 avail_modul.map((item, index) => (
-                                    <Item key={index} text={item} index={index} handleModul={handleModul} />
+                                    <Item key={index} desc={avail_modul_desc[index]} text={item} index={index} handleModul={handleModul} />
                                 ))
                             }
                         </div>
