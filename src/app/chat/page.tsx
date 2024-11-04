@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import Item from "../components/item"
 import ChatServer from "../components/chat_server"
 import ChatClient from "../components/chat_client"
-import { get_inatrims_response, get_market_response, get_product_respons } from "../controller/api"
+import { get_distribution_response, get_inatrims_response, get_market_response, get_product_respons } from "../controller/api"
 import { RSC_SEGMENTS_DIR_SUFFIX } from "next/dist/lib/constants"
 
 const poppins = Poppins({
@@ -46,31 +46,19 @@ const agent =
         '[INFO] ✍️ Memulai proses penulisan laporan akhir (Writer)'
     ]
 
-const data_markdown = `# Laporan Ekspor ke ASEAN: Produk Sawit
-
-## SWOT Analysis
-
-### Strengths
-Industri sawit di Indonesia memiliki beberapa keunggulan yang signifikan. Pertama, kualitas dan produktivitas perkebunan sawit di Indonesia tergolong tinggi, menjadikannya salah satu produsen utama di dunia. Hal ini didukung oleh kebijakan pemerintah yang proaktif dalam mendukung industri sawit, termasuk kebijakan ekspor yang memfasilitasi akses ke pasar internasional. Selain itu, jaringan distribusi yang sudah mapan di negara-negara ASEAN memberikan keuntungan kompetitif bagi produk sawit Indonesia dalam menjangkau konsumen di kawasan tersebut.
-
-### Weaknesses
-Namun, industri sawit Indonesia juga menghadapi beberapa kelemahan. Salah satu isu utama adalah masalah lingkungan dan keberlanjutan yang dapat mempengaruhi citra produk sawit di pasar global. Selain itu, ketergantungan pada pasar tertentu dan fluktuasi harga menjadi tantangan yang harus dihadapi oleh para pelaku industri. Kurangnya sertifikasi internasional untuk produk sawit juga menjadi hambatan dalam meningkatkan daya saing di pasar internasional. Menurut [Warta Ekonomi](https://wartaekonomi.co.id/read541879/gppi-beberkan-tantangan-akbar-dalam-industri-sawit-indonesia), produktivitas yang dinilai masih rendah dan tantangan dalam rantai pasok juga menjadi perhatian utama.
-
-### Opportunities
-Di sisi lain, terdapat peluang besar bagi industri sawit Indonesia di pasar ASEAN. Permintaan yang meningkat untuk minyak sawit di negara-negara ASEAN membuka peluang ekspor yang lebih luas. Selain itu, terdapat kesempatan untuk menjalin kemitraan dengan perusahaan lokal di ASEAN, yang dapat memperkuat posisi produk sawit Indonesia di pasar tersebut. Potensi untuk diversifikasi produk turunan dari sawit juga memberikan peluang untuk meningkatkan nilai tambah dan daya saing produk di pasar internasional.
-
-### Threats
-Industri sawit Indonesia juga dihadapkan pada berbagai ancaman. Persaingan dari negara penghasil sawit lainnya, seperti Malaysia, menjadi tantangan yang harus dihadapi. Selain itu, regulasi ketat terkait keberlanjutan dan lingkungan di negara tujuan ekspor dapat mempengaruhi akses pasar. Perubahan kebijakan perdagangan internasional juga dapat berdampak pada akses pasar dan daya saing produk sawit Indonesia. Menurut [Eurasia Review](https://www.eurasiareview.com/01092024-indonesias-palm-oil-strategy-navigating-new-challenges-and-opportunities-analysis/), tantangan dari regulasi Uni Eropa terkait deforestasi menjadi salah satu isu yang harus diatasi untuk memastikan keberlanjutan industri sawit Indonesia.
-
-## STP (Segmenting, Targeting, Positioning)
-Dalam strategi pemasaran produk sawit di ASEAN, segmentasi pasar dilakukan berdasarkan kebutuhan dan preferensi konsumen di masing-masing negara. Targeting difokuskan pada segmen pasar yang paling menguntungkan, dengan mempertimbangkan faktor-faktor seperti permintaan dan daya beli konsumen. Positioning produk sawit Indonesia diarahkan untuk menonjolkan kualitas dan keberlanjutan, sehingga dapat menjadi pilihan utama bagi konsumen di pasar ASEAN. Dengan pendekatan ini, diharapkan produk sawit Indonesia dapat memperkuat posisinya di pasar regional dan meningkatkan volume ekspor.`
-
-
-const avail_modul = ["Riset Pasar", "Regulasi dan Standar Mutu", "Riset Produk dan Pengembangan"]
+const avail_modul = [
+    "Riset Pasar",
+    "Regulasi dan Standar Mutu",
+    "Riset Produk dan Pengembangan",
+    "Logistik dan Distribusi",
+    "Prediksi Harga"
+]
 const first_message = [
     "Ayo tanyakan kondisi pasar internasional disini!!!",
     "Bingung regulasi ekspor impor? Jangan ragu tanya disini!!",
-    "Tulis deskripsi produkmu!! Langkah awal menaklukkan pasar dunia!"
+    "Tulis deskripsi produkmu!! Langkah awal menaklukkan pasar dunia!",
+    "Ingin distribusimu aman? Tanya dulu aja!",
+    "Pengen tahu perkiraan harga barang? Cek aja prediksinya!"
 ]
 
 export default function Chat() {
@@ -78,7 +66,6 @@ export default function Chat() {
     const [count, setCount] = useState(0)
     const [data, setData] = useState("")
     const [modul, setModul] = useState(-1)
-    const [result, setResult] = useState<string[]>([])
     const [modal, setModal] = useState(false)
     const [chatHistory, setChatHistory] = useState<{ status: boolean, text: string, flag: boolean }[]>([])
     const containerRef = useRef<HTMLDivElement>(null);
@@ -149,13 +136,29 @@ export default function Chat() {
         }
         else if (modul == 2) {
             try {
-                // console.log("Initiate response")
                 await get_product_respons(current).then(response => {
-                    // console.log(response)
                     setChatHistory(prevItems => prevItems.slice(0, -1));
                     setChatHistory(prev => [
                         ...prev,
                         { status: true, text: response.writer.result, flag: false }
+                    ])
+                })
+            } catch (error) {
+                console.error("Error in getting response:", error);
+            } finally {
+                clearInterval(interval);
+                setCount(0);
+                setModal(false)
+                setWait(false);
+            }
+        }
+        else if (modul == 3) {
+            try {
+                await get_distribution_response(current).then(response => {
+                    setChatHistory(prevItems => prevItems.slice(0, -1));
+                    setChatHistory(prev => [
+                        ...prev,
+                        { status: true, text: response.result, flag: false }
                     ])
                 })
             } catch (error) {
@@ -193,9 +196,7 @@ export default function Chat() {
 
 
     useEffect(() => {
-        // console.log(chatHistory)
         scroll()
-        // chat.scrollTop = chat.scrollHeight;
     }, [chatHistory])
 
     return (
@@ -239,8 +240,6 @@ export default function Chat() {
                                 ))
                             }
                         </div>
-                        {/* <div className="loader"></div> */}
-
                     </div>
                     :
                     <div className="h-full">

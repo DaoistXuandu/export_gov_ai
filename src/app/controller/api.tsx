@@ -29,8 +29,6 @@ async function get_market_response(input: string) {
             "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
         }
     })
-        // const data = await result.text();
-        // console.log("RESULT", data)
         .then(response => response.json())
         .then(data => data)
 
@@ -55,4 +53,23 @@ async function get_product_respons(input: string) {
     return result
 }
 
-export { get_inatrims_response, get_market_response, get_product_respons }
+
+async function get_distribution_response(input: string) {
+    const result = await fetch(`https://chat-app-django.vercel.app/distributor/`, {
+        method: 'POST',
+        body: JSON.stringify({
+            description: input
+        }),
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+        }
+    })
+        .then(response => response.json())
+        .then(data => data)
+
+    return result
+}
+
+export { get_inatrims_response, get_market_response, get_product_respons, get_distribution_response }

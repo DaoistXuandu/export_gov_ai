@@ -11,17 +11,20 @@ export default function Item({ text, index, handleModul }: { text: string, index
             text-indigo-900
             bg-white
             hover:bg-gray-200
-            flex items-center
+            flex items-center md:items-start
             cursor-pointer 
             p-4 md:p-8 pt-4 pb-4 border-white
             shadow-lg
             gap-2
+            flex
+            flex-row
+            md:flex-col
             ${poppins.className}`}
             onClick={e => handleModul(index)}
         >
 
-            <img src="/image/search.svg" className="w-5 h-5" alt="" />
-            <p className="font-bold text-lg text-left gap-2">
+            <img src="/image/search.svg" className="w-5 h-5 md:w-8 md:h-8" alt="" />
+            <p className="font-bold text-xl text-left">
                 {text}
             </p>
         </div>
