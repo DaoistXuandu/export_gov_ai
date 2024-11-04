@@ -79,6 +79,7 @@ export default function Chat() {
     const [data, setData] = useState("")
     const [modul, setModul] = useState(-1)
     const [result, setResult] = useState<string[]>([])
+    const [modal, setModal] = useState(false)
     const [chatHistory, setChatHistory] = useState<{ status: boolean, text: string, flag: boolean }[]>([])
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -89,6 +90,7 @@ export default function Chat() {
 
     async function handleAdd() {
         setWait(true)
+        setModal(true)
         let current = data
         setChatHistory(prev => [
             ...prev,
@@ -122,6 +124,7 @@ export default function Chat() {
             } finally {
                 clearInterval(interval);
                 setCount(0);
+                setModal(false)
                 setWait(false);
             }
         }
@@ -158,7 +161,12 @@ export default function Chat() {
             h-screen 
             bg-gray-200`}>
 
-            <div className={` ${wait ? '' : 'hidden'} fixed z-100 bottom-32 transition ease-in-out duration-700 right-20 p-8 pt-6 pb-6 w-96 rounded-xl h-fit shadow-2xl bg-white ${poppins.className} flex flex-col gap-4`}>
+            <div className={`${(wait && modal) ? '' : 'hidden'} fixed z-100  bottom-32 right-2 md:right-20 transition ease-in-out duration-700  p-8 pt-6 pb-6 w-96 rounded-xl h-fit shadow-2xl bg-white ${poppins.className} flex flex-col gap-4`}>
+                <div onClick={e => setModal(false)} className="rounded-full p-3 absolute -top-16 left-0 bg-white hover:scale-95 cursor-pointer shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </div>
                 <h1 className="font-bold text-lg">Apa yang AI sedang lakukan??</h1>
                 <div className="text-sm flex flex-col gap-1">
                     {
