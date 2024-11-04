@@ -25,12 +25,14 @@ export default function Item({ text, index, handleModul, desc }: { text: string,
         >
 
             <img src="/image/search.svg" className="w-5 h-5 md:w-8 md:h-8" alt="" />
-            <p className="font-bold text-2xl text-left">
-                {text}
-            </p>
-            <p className="text-md">
-                {desc}
-            </p>
+            <div className="flex flex-col">
+                <p className="font-bold text-2xl text-left">
+                    {text}
+                </p>
+                <p className="text-md">
+                    {desc}
+                </p>
+            </div>
         </div>
     )
 }
