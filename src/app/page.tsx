@@ -24,8 +24,10 @@ export default function Home() {
   return (
     <div className="bg-cover bg-center bg-gray-100 w-screen h-screen bg-[url('/image/background_general.svg')]">
       <div className={`text-white w-full md:text-black sm:${noto_sans.className} md:${poppins.className} h-full flex flex-col justify-center p-10 md:p-20 gap-8 md:gap-6`}>
-        <div className='w-fit mx-auto md:mx-0 flex gap-2 flex-col'>
-          <div className="font-bold flex flex-row justify-start items-start text-5xl text-center md:text-left md:text-8xl animate-type w-fit">Cuan, ExporAI</div>
+        <div className='mx-auto md:mx-0 flex gap-2 flex-col'>
+          <div className='w-fit'>
+            <p className="font-bold flex flex-row justify-start items-start text-5xl text-center md:text-left md:text-8xl animate-type w-fit">Cuan, ExporAI</p>
+          </div>
           <p className="animate-bounce text-center text-lg md:text-md md:text-left md:text-2xl font-medium">Solusi AI terpadu untuk mendukung UMKM dalam meraih pasar ekspor ASEAN.</p>
         </div>
         <div className='sm:w-full md:w-fit flex sm:mx-auto md:mx-0'>

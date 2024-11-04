@@ -1,7 +1,7 @@
 "use client"
 import { Poppins, Noto_Sans, Roboto } from "next/font/google"
 import { it } from "node:test";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { get_data } from "../controller/api";
 
 const poppins = Poppins({
@@ -64,7 +64,8 @@ const options = [[
     'Semarang',
     'Bogor',
     'Surabaya'
-], [
+],
+[
     'DKI Jakarta',
     'DI Yogyakarta',
     'Jawa Tengah',
@@ -103,7 +104,7 @@ const outputLabels = [
 
 
 export default function Fee() {
-    const [inputData, setInputData] = useState<(string | number)[]>(["", "", "", "", "", "", 0, 0, 0, 0])
+    const [inputData, setInputData] = useState<(string | number)[]>([options[0][0], options[1][0], options[2][0], options[3][0], options[4][0], options[5][0], 0, 0, 0, 0])
     const [outputData, setOutputData] = useState<string[]>(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"])
     const [wait, setWait] = useState(false)
 
@@ -131,6 +132,13 @@ export default function Fee() {
         setInputData(prev => {
             let items = [...prev]
             items[index] = value
+            if (index == 4) {
+                for (let i = 0; i < options[index].length; i++) {
+                    if (options[index][i] == value) {
+                        items[index + 1] = options[index + 1][i]
+                    }
+                }
+            }
             return items;
         })
     }
@@ -144,32 +152,41 @@ export default function Fee() {
             w-screen 
             min-h-screen 
             bg-gray-200 
-            p-12 pl-32 pr-32
+            p-4 md:p-12 lg:pl-32 lg:pr-32 
             fixed
-            flex flex-row
+            flex flex-col-reverse md:flex-row
             gap-10
             `}>
 
-            <div className={`relative w-1/2 bg-white shadow-lg rounded-2xl border h-fit ${noto_sans_m.className} flex flex-col gap-2`}>
+            <div className={`relative md:w-1/2 bg-white shadow-lg rounded-2xl border h-fit ${noto_sans_m.className} flex flex-col gap-2`}>
                 <div className={`${wait ? '' : 'hidden'} absolute w-full h-full bg-white rounded-2xl opacity-60 flex justify-center items-center`}>
                     <div className="loader"></div>
                 </div>
-                <div className="w-full flex flex-row gap-8 p-10">
+                <div className="w-full flex  flex-row gap-8 p-10">
                     <div className="w-full flex flex-col gap-8">
                         <h1 className="font-bold text-3xl">Rencana Pembelian</h1>
 
-                        <div className="flex flex-col">
+                        <div className="flex flex-col gap-1">
                             {
                                 keys.map((item, index) => (
-                                    <div key={index} className="flex flex-col">
+                                    <div key={index} className={`flex flex-col ${index == 5 ? 'hidden' : ''}`}>
                                         <label className="text-md" htmlFor={item}>{keyLabels[index][1]}</label>
-                                        <input value={inputData[index]}
-                                            onChange={e => handleInput(index, e.target.value)}
-                                            className="rounded-lg bg-gray-200 text-sm p-3"
-                                            placeholder={keyLabels[index][0]} required={true}
-                                            type={index >= 6 ? 'number' : 'text'}
-                                            id={item}
-                                            name={item} />
+                                        {
+                                            index < 6 ?
+                                                <select onChange={e => handleInput(index, e.target.value)} key={index} className={`rounded-lg bg-gray-200 text-sm p-3 `} >
+                                                    {options[index].map((item, index) => (
+                                                        <option key={index} >{item}</option>
+                                                    ))}
+                                                </select>
+                                                :
+                                                <input value={inputData[index]}
+                                                    onChange={e => handleInput(index, e.target.value)}
+                                                    className="rounded-lg bg-gray-200 text-sm p-3"
+                                                    placeholder={keyLabels[index][0]} required={true}
+                                                    type='number'
+                                                    id={item}
+                                                    name={item} />
+                                        }
                                     </div>
                                 ))
                             }
@@ -179,7 +196,7 @@ export default function Fee() {
                 </div>
             </div>
 
-            <div className={`w-1/2 bg-white shadow-lg rounded-2xl border h-fit p-10 ${noto_sans_m.className} flex flex-col gap-2`}>
+            <div className={`md:w-1/2 bg-white shadow-lg rounded-2xl border h-fit p-10 ${noto_sans_m.className} flex flex-col gap-2`}>
                 <div className="w-fit flex flex-col gap-4">
                     <div className="font-bold w-fit flex flex-col justify-start items-start">
                         <h1 className="text-xl">Estimasi total:</h1>
