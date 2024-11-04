@@ -5,8 +5,6 @@ import Item from "../components/item"
 import ChatServer from "../components/chat_server"
 import ChatClient from "../components/chat_client"
 import { get_distribution_response, get_inatrims_response, get_market_response, get_product_respons } from "../controller/api"
-import { routeModule } from "next/dist/build/templates/pages"
-import { Router } from "express"
 import { useRouter } from "next/navigation"
 
 const poppins = Poppins({
