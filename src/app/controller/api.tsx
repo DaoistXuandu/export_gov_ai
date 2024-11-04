@@ -5,7 +5,9 @@ async function get_inatrims_response(input: string) {
             description: input
         }),
         headers: {
-            'content-type': 'application/json'
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
         }
     })
         .then(response => response.json())

@@ -28,7 +28,7 @@ export default function ChatServer({ text, flag, last }: { text: any, flag: bool
                 <img src="https://github.com/shadcn.png" className="w-12 h-12 rounded-full" />
             </div>
             <div className="w-fit">
-                <div className={`${last && !flag ? ' ' : 'hidden'} font-bold text-red-400 ${poppins.className}`}>Pesan terakhir</div>
+                <div className={`${last && !flag ? ' ' : 'hidden'} font-bold text-red-800 ${poppins.className}`}>Pesan terakhir</div>
                 {
                     flag ? (
                         <div className="loader"></div>

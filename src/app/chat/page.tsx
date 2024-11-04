@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import Item from "../components/item"
 import ChatServer from "../components/chat_server"
 import ChatClient from "../components/chat_client"
-import { get_market_response, get_product_respons } from "../controller/api"
+import { get_inatrims_response, get_market_response, get_product_respons } from "../controller/api"
 import { RSC_SEGMENTS_DIR_SUFFIX } from "next/dist/lib/constants"
 
 const poppins = Poppins({
@@ -129,7 +129,23 @@ export default function Chat() {
             }
         }
         else if (modul == 1) {
-
+            try {
+                // console.log("Initiate response")
+                await get_inatrims_response(current).then(response => {
+                    setChatHistory(prevItems => prevItems.slice(0, -1));
+                    setChatHistory(prev => [
+                        ...prev,
+                        { status: true, text: response.result, flag: false }
+                    ])
+                })
+            } catch (error) {
+                console.error("Error in getting response:", error);
+            } finally {
+                clearInterval(interval);
+                setCount(0);
+                setModal(false)
+                setWait(false);
+            }
         }
         else if (modul == 2) {
             try {
@@ -150,6 +166,15 @@ export default function Chat() {
                 setModal(false)
                 setWait(false);
             }
+        }
+        else {
+            setTimeout(() => {
+                setChatHistory(prevItems => prevItems.slice(0, -1));
+                setChatHistory(prev => [
+                    ...prev,
+                    { status: true, text: "Sedang ada kendala!! Mohon mencoba sesaat lagi", flag: false }
+                ])
+            }, 3000)
         }
     }
 
