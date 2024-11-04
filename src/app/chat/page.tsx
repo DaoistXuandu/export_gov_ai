@@ -60,13 +60,19 @@ const avail_modul_desc = [
     "Tanya tentang pengiriman untuk ekspor Anda",
     "Perkirakan total biaya ekspor disini"
 ]
-
 const first_message = [
     "Agent Market Research memudahkan Anda melakukan analisis SWOT (Strength, Weakness, Opportunities, Threats) dan STP (Segmenting, Targeting, Positioning) dengan bantuan AI yang bekerja secara otomatis. Proses ini mencari informasi di berbagai sumber, mengumpulkan data relevan, dan menyusunnya menjadi laporan lengkap tanpa perlu usaha manual. Anda hanya perlu memasukkan deskripsi produk Anda, dan laporan strategi yang komprehensif mencakup kekuatan, kelemahan, peluang, ancaman, serta segmentasi, penargetan, dan pemosisian pasar akan tersedia untuk membantu Anda memahami pasar dan mengambil keputusan terbaik.",
     "TanyaRegulasi memastikan produk Anda mematuhi regulasi dan standar mutu di negara tujuan. Terintegrasi dengan sumber resmi Inatrims, fitur ini menyediakan jawaban cepat dan akurat terkait regulasi dan standar mutu ekspor di negara tujuan, sehingga Anda dapat memastikan kepatuhan tanpa kerumitan. Dapatkan informasi yang Anda butuhkan untuk memastikan produk Anda siap menembus pasar internasional dengan mudah dan aman.",
     "TanyaRegulasi memastikan produk Anda mematuhi regulasi dan standar mutu di negara tujuan. Terintegrasi dengan sumber resmi Inatrims, fitur ini menyediakan jawaban cepat dan akurat terkait regulasi dan standar mutu ekspor di negara tujuan, sehingga Anda dapat memastikan kepatuhan tanpa kerumitan. Dapatkan informasi yang Anda butuhkan untuk memastikan produk Anda siap menembus pasar internasional dengan mudah dan aman.",
     "TanyaPengiriman memudahkan Anda menemukan solusi pengiriman ekspor terbaik. Dengan teknologi AI, fitur ini menyediakan informasi terkini dan daftar lokasi ekspor terdekat untuk mendukung pengiriman ekspor Anda.",
     "Estimasi Biaya membantu Anda merencanakan ekspor dengan lebih baik. Dengan Machine Learning, fitur ini membantu Anda mengestimasi total biaya ekspor."
+]
+
+const example = [
+    'Bagaimana peluang ekspor sawit ke thailand',
+    'Bagaimana regulasi dan standar mutu ekspor baterai ke Malaysia?',
+    'Minyak atsiri alami yang diekstraksi dari tumbuhan pilihan untuk menghasilkan aroma yang murni dan berkualitas tinggi',
+    'Jelaskan tentang pengiriman ekspor melalui pos indonesia'
 ]
 
 export default function Chat() {
@@ -224,6 +230,7 @@ export default function Chat() {
             w-screen 
             h-screen 
             bg-gray-200`}>
+
             <div className={`${(wait && modal) ? '' : 'hidden'} fixed z-100  bottom-32 right-2 md:right-20 transition ease-in-out duration-700  p-8 pt-6 pb-6 w-96 rounded-xl h-fit shadow-2xl bg-white ${poppins.className} flex flex-col gap-4`}>
                 <div onClick={e => setModal(false)} className="rounded-full p-3 absolute -top-16 left-0 bg-white hover:scale-95 cursor-pointer shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -279,7 +286,7 @@ export default function Chat() {
                                     disabled={wait}
                                     onChange={e => setData(e.target.value)}
                                     value={data}
-                                    placeholder="Apa yang bisa dibantu?"
+                                    placeholder={example[modul]}
                                     className={`border border-1 shadow-lg w-full p-5 pt-3 pb-3 pr-12 rounded-full ${noto_sans_m.className}`} type="text" />
 
                                 <button

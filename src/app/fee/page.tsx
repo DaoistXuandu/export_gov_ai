@@ -33,54 +33,45 @@ const keys = [
     "hpp"
 ];
 
-const hs_code = [
+const options = [[
     '4802.56',
     '8421.39',
     '207.14',
     '2201.1',
     '6307.9',
-]
-
-const kategori_barang = [
+],
+[
     'Kertas',
     'Mesin pembersih udara',
     'Daging ayam',
     'Air mineral',
     'Masker medis'
-]
-
-const deskripsi_produk = [
+], [
     'Kertas yang digunakan untuk menulis atau mencetak',
     'Mesin penyaring udara untuk keperluan domestik',
     'Daging ayam beku, potongan',
     'Air mineral dan air soda',
     'Masker pelindung untuk medis'
-]
-
-const negara_tujuan = [
+], [
     'Malaysia',
     'Filipina',
     'Kamboja',
     'Vietnam',
     'Singapura'
-]
-
-const kota_asal = [
+], [
     'Jakarta',
     'Yogyakarta',
     'Semarang',
     'Bogor',
     'Surabaya'
-]
-
-const provinsi_asal = [
+], [
     'DKI Jakarta',
     'DI Yogyakarta',
     'Jawa Tengah',
     'Jawa Barat',
     'Jawa Timur'
 ]
-
+]
 const keyLabels = [
     ["hs_code", "HS Code"],
     ["kategori_barang", "Kategori Barang"],
