@@ -126,7 +126,7 @@ export default function Fee() {
                                         <label className="text-md" htmlFor={item}>{keyLabels[index][1]}</label>
                                         <input value={inputData[index]}
                                             onChange={e => handleInput(index, e.target.value)}
-                                            className="rounded-lg font-thin bg-gray-200 text-sm p-3"
+                                            className="rounded-lg bg-gray-200 text-sm p-3"
                                             placeholder={keyLabels[index][0]} required={true}
                                             type={index >= 6 ? 'number' : 'text'}
                                             id={item}
