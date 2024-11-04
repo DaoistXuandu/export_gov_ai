@@ -50,8 +50,8 @@ const avail_modul = [
     "Riset Pasar",
     "Regulasi dan Standar Mutu",
     "Riset Produk dan Pengembangan",
-    "Logistik dan Distribusi",
-    "Prediksi Harga"
+    "Logistik dan Distribusi"
+    // "Prediksi Harga"
 ]
 const first_message = [
     "Ayo tanyakan kondisi pasar internasional disini!!!",
@@ -177,6 +177,10 @@ export default function Chat() {
                     ...prev,
                     { status: true, text: "Sedang ada kendala!! Mohon mencoba sesaat lagi", flag: false }
                 ])
+                clearInterval(interval);
+                setCount(0);
+                setModal(false)
+                setWait(false);
             }, 3000)
         }
     }
