@@ -2,11 +2,10 @@
 import { Poppins, Noto_Sans, Roboto } from "next/font/google"
 import { useEffect, useState, useRef } from "react"
 import Item from "../components/item"
-import { babelIncludeRegexes } from "next/dist/build/webpack-config"
 import ChatServer from "../components/chat_server"
 import ChatClient from "../components/chat_client"
-import { time } from "console"
-import { text } from "stream/consumers"
+import { get_market_response } from "../controller/api"
+import { RSC_SEGMENTS_DIR_SUFFIX } from "next/dist/lib/constants"
 
 const poppins = Poppins({
     weight: '400',
@@ -34,27 +33,49 @@ const noto_sans_w = Noto_Sans({
     subsets: ['latin'],
 })
 
+const agent =
+    [
+        '[INFO] 📝 Memulai proses perencanaan (Planner)',
+        '[INFO] ✅ Planner selesai menghasilkan outline',
+        '[INFO] 🔍 Memulai perencanaan pencarian informasi (Web Planner)',
+        '[INFO] 📋 Web Planner menghasilkan query pencarian',
+        '[INFO] 🌐 Memulai proses pengambilan data dari web (Web Retriever)',
+        '[INFO] 🔗 Web Retriever berhasil memperbarui konteks',
+        '[INFO] 📊 Memulai proses penilaian (Grader)',
+        '[INFO] ⏹️ Iterasi maksimum tercapai. Menghentikan proses iterasi.',
+        '[INFO] ✍️ Memulai proses penulisan laporan akhir (Writer)'
+    ]
+
+const data_markdown = `# Laporan Ekspor ke ASEAN: Produk Sawit
+
+## SWOT Analysis
+
+### Strengths
+Industri sawit di Indonesia memiliki beberapa keunggulan yang signifikan. Pertama, kualitas dan produktivitas perkebunan sawit di Indonesia tergolong tinggi, menjadikannya salah satu produsen utama di dunia. Hal ini didukung oleh kebijakan pemerintah yang proaktif dalam mendukung industri sawit, termasuk kebijakan ekspor yang memfasilitasi akses ke pasar internasional. Selain itu, jaringan distribusi yang sudah mapan di negara-negara ASEAN memberikan keuntungan kompetitif bagi produk sawit Indonesia dalam menjangkau konsumen di kawasan tersebut.
+
+### Weaknesses
+Namun, industri sawit Indonesia juga menghadapi beberapa kelemahan. Salah satu isu utama adalah masalah lingkungan dan keberlanjutan yang dapat mempengaruhi citra produk sawit di pasar global. Selain itu, ketergantungan pada pasar tertentu dan fluktuasi harga menjadi tantangan yang harus dihadapi oleh para pelaku industri. Kurangnya sertifikasi internasional untuk produk sawit juga menjadi hambatan dalam meningkatkan daya saing di pasar internasional. Menurut [Warta Ekonomi](https://wartaekonomi.co.id/read541879/gppi-beberkan-tantangan-akbar-dalam-industri-sawit-indonesia), produktivitas yang dinilai masih rendah dan tantangan dalam rantai pasok juga menjadi perhatian utama.
+
+### Opportunities
+Di sisi lain, terdapat peluang besar bagi industri sawit Indonesia di pasar ASEAN. Permintaan yang meningkat untuk minyak sawit di negara-negara ASEAN membuka peluang ekspor yang lebih luas. Selain itu, terdapat kesempatan untuk menjalin kemitraan dengan perusahaan lokal di ASEAN, yang dapat memperkuat posisi produk sawit Indonesia di pasar tersebut. Potensi untuk diversifikasi produk turunan dari sawit juga memberikan peluang untuk meningkatkan nilai tambah dan daya saing produk di pasar internasional.
+
+### Threats
+Industri sawit Indonesia juga dihadapkan pada berbagai ancaman. Persaingan dari negara penghasil sawit lainnya, seperti Malaysia, menjadi tantangan yang harus dihadapi. Selain itu, regulasi ketat terkait keberlanjutan dan lingkungan di negara tujuan ekspor dapat mempengaruhi akses pasar. Perubahan kebijakan perdagangan internasional juga dapat berdampak pada akses pasar dan daya saing produk sawit Indonesia. Menurut [Eurasia Review](https://www.eurasiareview.com/01092024-indonesias-palm-oil-strategy-navigating-new-challenges-and-opportunities-analysis/), tantangan dari regulasi Uni Eropa terkait deforestasi menjadi salah satu isu yang harus diatasi untuk memastikan keberlanjutan industri sawit Indonesia.
+
+## STP (Segmenting, Targeting, Positioning)
+Dalam strategi pemasaran produk sawit di ASEAN, segmentasi pasar dilakukan berdasarkan kebutuhan dan preferensi konsumen di masing-masing negara. Targeting difokuskan pada segmen pasar yang paling menguntungkan, dengan mempertimbangkan faktor-faktor seperti permintaan dan daya beli konsumen. Positioning produk sawit Indonesia diarahkan untuk menonjolkan kualitas dan keberlanjutan, sehingga dapat menjadi pilihan utama bagi konsumen di pasar ASEAN. Dengan pendekatan ini, diharapkan produk sawit Indonesia dapat memperkuat posisinya di pasar regional dan meningkatkan volume ekspor.`
+
+
 const avail_modul = ["Riset Pasar", "Regulasi dan Standar Mutu", "Riset Produk dan Pengembangan"]
-const dummy_mini = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. '
-const dummy_short = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-`
-const dummy = `What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-
-Where does it come from?
-Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-
-Where can I get some?
-There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.`
+const first_message = [
+    "Ayo tanyakan kondisi pasar internasional disini!!!",
+    "Bingung regulasi ekspor impor? Jangan ragu tanya disini!!",
+    "Tulis deskripsi produkmu!! Langkah awal menaklukkan pasar dunia!"
+]
 
 export default function Chat() {
     const [wait, setWait] = useState(false)
+    const [count, setCount] = useState(0)
     const [data, setData] = useState("")
     const [modul, setModul] = useState(-1)
     const [result, setResult] = useState<string[]>([])
@@ -66,44 +87,62 @@ export default function Chat() {
         setModul(value);
     }
 
-    function handleAdd() {
+    async function handleAdd() {
         setWait(true)
+        let current = data
         setChatHistory(prev => [
             ...prev,
             { status: false, text: data, flag: false }
         ])
         setData("")
 
+        const interval = setInterval(() => {
+            setCount(count => count + 1)
+        }, 5000)
+
+
         setChatHistory(prev => [
             ...prev,
             { status: true, text: "", flag: true }
         ])
 
-
-        setTimeout(() => {
-            setChatHistory(prevItems => prevItems.slice(0, -1));
-            setChatHistory(prev => [
-                ...prev,
-                { status: true, text: dummy, flag: false }
-            ])
-            setWait(false)
-        }, 1000)
+        // console.log(modul)
+        if (modul == 0) {
+            try {
+                // console.log("Initiate response")
+                await get_market_response(current).then(response => {
+                    setChatHistory(prevItems => prevItems.slice(0, -1));
+                    setChatHistory(prev => [
+                        ...prev,
+                        { status: true, text: response.writer.result, flag: false }
+                    ])
+                })
+            } catch (error) {
+                console.error("Error in getting response:", error);
+            } finally {
+                clearInterval(interval);
+                setCount(0);
+                setWait(false);
+            }
+        }
     }
 
-    useEffect(() => {
+    const scroll = () => {
         const container = containerRef.current;
         if (!container) return;
-        const scroll = () => {
-            // Check if content overflows container
-            if (container.scrollHeight > container.clientHeight) {
-                // Scroll to the bottom
-                container.scrollTo({
-                    top: container.scrollHeight,
-                    behavior: 'smooth'
-                });
-            }
-        };
+        // Check if content overflows container
+        if (container.scrollHeight > container.clientHeight) {
+            // Scroll to the bottom
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    };
 
+
+    useEffect(() => {
+        console.log(chatHistory)
         scroll()
         // chat.scrollTop = chat.scrollHeight;
     }, [chatHistory])
@@ -118,6 +157,18 @@ export default function Chat() {
             w-screen 
             h-screen 
             bg-gray-200`}>
+
+            <div className={` ${wait ? '' : 'hidden'} fixed z-100 bottom-32 transition ease-in-out duration-700 right-20 p-8 pt-6 pb-6 w-96 rounded-xl h-fit shadow-2xl bg-white ${poppins.className} flex flex-col gap-4`}>
+                <h1 className="font-bold text-lg">Apa yang AI sedang lakukan??</h1>
+                <div className="text-sm flex flex-col gap-1">
+                    {
+                        agent.map((item, index) =>
+                            <div className={`${index > count ? 'hidden' : ''}  ${index == count ? 'text-red-400' : ''} `} key={index}>{item}</div>
+                        )
+                    }
+                </div>
+            </div>
+
             {
                 modul == -1 ?
                     <div className="md:p-20 p-3 pt-12 flex flex-col space-y-10 justify-center items-center h-full">
@@ -140,10 +191,11 @@ export default function Chat() {
                         <div ref={containerRef} className="h-5/6 p-4 md:p-20 pt-12 flex flex-col gap-8 overflow-y-scroll">
                             <h1 className={`font-bold text-4xl ${roboto.className} animate-bounce text-center text-white md:text-black md:text-left`}>{avail_modul[modul]}</h1>
                             <div className="flex flex-col gap-8">
+                                <ChatServer key={-1} flag={false} text={first_message[modul]} last={false} />
                                 {
                                     chatHistory != undefined && chatHistory.length > 0 ?
                                         chatHistory.map((item, index) => (
-                                            item.status ? <ChatServer key={index} flag={item.flag} text={item.text} /> : <ChatClient key={index} text={item.text} />
+                                            item.status ? <ChatServer key={index} flag={item.flag} text={item.text} last={index == chatHistory.length - 1} /> : <ChatClient key={index} text={item.text} />
                                         ))
                                         :
                                         ""
@@ -152,7 +204,7 @@ export default function Chat() {
                         </div>
 
 
-                        <div className="h-1/6 z-100 w-full p-4 md:p-10 md:pl-20 md:pr-20 flex flex-row flex items-center">
+                        <div className="h-1/6 z-50 w-full p-4 md:p-10 md:pl-20 md:pr-20 flex flex-row flex items-center">
                             <form className="relative w-full flex items-center">
                                 <input
                                     disabled={wait}

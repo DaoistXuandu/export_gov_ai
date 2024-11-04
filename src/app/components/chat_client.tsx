@@ -5,7 +5,7 @@ const poppins = Poppins({
     subsets: ['latin'],
 })
 
-export default function ChatClient({ text }: { text: string }) {
+export default function ChatClient({ text }: { text: any }) {
     return (
         <div className="flex flex-row gap-2 justify-end w-full">
             <div className={`w-fit bg-white rounded-sm p-3 ${poppins.className} shadow-lg`}>

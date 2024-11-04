@@ -179,3 +179,28 @@ body {
     background-position: 0% 50%, 50% 50%, 100% 100%
   }
 }
+
+
+#content h3 {
+  margin-top: 5px;
+  font-size: large;
+  font-weight: 700;
+}
+
+
+#content h2 {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: x-large;
+}
+
+#content h1 {
+  margin-top: "100px";
+  font-weight: 1000;
+  font-size: xx-large;
+}
+
+#content p {
+  margin-top: "100px";
+  font-size: medium;
+}
