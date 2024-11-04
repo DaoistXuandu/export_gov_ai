@@ -5,7 +5,9 @@ import Item from "../components/item"
 import ChatServer from "../components/chat_server"
 import ChatClient from "../components/chat_client"
 import { get_distribution_response, get_inatrims_response, get_market_response, get_product_respons } from "../controller/api"
-import { RSC_SEGMENTS_DIR_SUFFIX } from "next/dist/lib/constants"
+import { routeModule } from "next/dist/build/templates/pages"
+import { Router } from "express"
+import { useRouter } from "next/navigation"
 
 const poppins = Poppins({
     weight: '400',
@@ -50,8 +52,8 @@ const avail_modul = [
     "Riset Pasar",
     "Regulasi dan Standar Mutu",
     "Riset Produk dan Pengembangan",
-    "Logistik dan Distribusi"
-    // "Prediksi Harga"
+    "Logistik dan Distribusi",
+    "Prediksi Harga"
 ]
 const first_message = [
     "Ayo tanyakan kondisi pasar internasional disini!!!",
@@ -70,9 +72,13 @@ export default function Chat() {
     const [chatHistory, setChatHistory] = useState<{ status: boolean, text: string, flag: boolean }[]>([])
     const containerRef = useRef<HTMLDivElement>(null);
 
+    const router = useRouter()
 
     function handleModul(value: number) {
         setModul(value);
+        if (value == 4) {
+            router.push("/fee")
+        }
     }
 
     async function handleAdd() {
@@ -198,7 +204,6 @@ export default function Chat() {
         }
     };
 
-
     useEffect(() => {
         scroll()
     }, [chatHistory])
@@ -213,7 +218,6 @@ export default function Chat() {
             w-screen 
             h-screen 
             bg-gray-200`}>
-
             <div className={`${(wait && modal) ? '' : 'hidden'} fixed z-100  bottom-32 right-2 md:right-20 transition ease-in-out duration-700  p-8 pt-6 pb-6 w-96 rounded-xl h-fit shadow-2xl bg-white ${poppins.className} flex flex-col gap-4`}>
                 <div onClick={e => setModal(false)} className="rounded-full p-3 absolute -top-16 left-0 bg-white hover:scale-95 cursor-pointer shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
