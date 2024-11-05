@@ -1,5 +1,5 @@
 async function get_inatrims_response(input: string) {
-    const result = await fetch(`https://chat-app-django.vercel.app/inatrims/`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}inatrims/`, {
         method: 'POST',
         body: JSON.stringify({
             description: input
@@ -17,7 +17,7 @@ async function get_inatrims_response(input: string) {
 }
 
 async function get_market_response(input: string) {
-    const result = await fetch(`https://chat-app-django.vercel.app/market/`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}market/`, {
         method: 'POST',
         body: JSON.stringify({
             description: input
@@ -36,7 +36,7 @@ async function get_market_response(input: string) {
 
 
 async function get_product_respons(input: string) {
-    const result = await fetch(`https://chat-app-django.vercel.app/product/`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}product/`, {
         method: 'POST',
         body: JSON.stringify({
             description: input
