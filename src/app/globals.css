@@ -204,3 +204,8 @@ body {
   margin-top: "100px";
   font-size: medium;
 }
+
+#content a {
+  text-decoration: underline;
+  color: blue;
+}

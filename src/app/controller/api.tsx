@@ -55,7 +55,7 @@ async function get_product_respons(input: string) {
 
 
 async function get_distribution_response(input: string) {
-    const result = await fetch(`https://chat-app-django.vercel.app/distributor/`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}distributor/`, {
         method: 'POST',
         body: JSON.stringify({
             description: input
